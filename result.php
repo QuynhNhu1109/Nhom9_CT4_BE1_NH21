@@ -1,6 +1,4 @@
-<?php
-   include "header.php" ?>
-   
+<?php include "header.php";?>
 		<!-- BREADCRUMB -->
 		<div id="breadcrumb" class="section">
 			<!-- container -->
@@ -12,7 +10,7 @@
 							<li><a href="#">Home</a></li>
 							<li><a href="#">All Categories</a></li>
 							<li><a href="#">Accessories</a></li>
-							<li class="active">Headphones (227,490 Results)</li>
+							<li class="active">Headphones (<?php echo count($getAllProducts); ?>)</li>
 						</ul>
 					</div>
 				</div>
@@ -40,7 +38,7 @@
 									<label for="category-1">
 										<span></span>
 										Laptops
-										<small>(120)</small>
+										<small>(<?php echo count($getProductLapTop) ?>)</small>
 									</label>
 								</div>
 
@@ -49,7 +47,7 @@
 									<label for="category-2">
 										<span></span>
 										Smartphones
-										<small>(740)</small>
+										<small>(<?php echo count($getProductPhones) ?>)</small>
 									</label>
 								</div>
 
@@ -70,22 +68,12 @@
 										<small>(578)</small>
 									</label>
 								</div>
-
 								<div class="input-checkbox">
-									<input type="checkbox" id="category-5">
-									<label for="category-5">
+									<input type="checkbox" id="category-4">
+									<label for="category-4">
 										<span></span>
-										Laptops
-										<small>(120)</small>
-									</label>
-								</div>
-
-								<div class="input-checkbox">
-									<input type="checkbox" id="category-6">
-									<label for="category-6">
-										<span></span>
-										Smartphones
-										<small>(740)</small>
+										Accessories
+										<small>(578)</small>
 									</label>
 								</div>
 							</div>
@@ -238,18 +226,24 @@
 
 						<!-- store products -->
 						<div class="row">
-						<?php
-							if(isset($_GET['keyword'])):
-							$keyword = $_GET['keyword'];
-							$search = $product->search($keyword);
-							echo "Result:".count($search);
-							foreach($search as $value):
-							?>
 							<!-- product -->
+							<?php if(isset($_GET['keyword'])):
+									$keyword = $_GET['keyword'];
+									$search= $product->search($keyword);
+									$perPage =3;
+									$page =isset($_GET['page'])?$_GET['page']:1; 
+									$total = count($search);
+									$url = $_SERVER['PHP_SELF']."?keyword=".$keyword;
+									$search = $product->search3($keyword,$page, $perPage);
+									if(count($search)==0){
+									echo "	<h2>Không tìm thấy sản phẩm</h2>";}
+									else
+									foreach($search as $value):
+								?>
 							<div class="col-md-4 col-xs-6">
 								<div class="product">
 									<div class="product-img">
-										<img src="./img/product01.png" alt="">
+										<img src="./img/<?php echo $value['image']?> "alt="">
 										<div class="product-label">
 											<span class="sale">-30%</span>
 											<span class="new">NEW</span>
@@ -257,8 +251,8 @@
 									</div>
 									<div class="product-body">
 										<p class="product-category">Category</p>
-										<h3 class="product-name"><a href="#">product name goes here</a></h3>
-										<h4 class="product-price">$980.00 <del class="product-old-price">$990.00</del></h4>
+										<h3 class="product-name"><a href="#"><?php echo $value['name']?></a></h3>
+										<h4 class="product-price"><?php echo number_format($value['price'])?> VND</h4>
 										<div class="product-rating">
 											<i class="fa fa-star"></i>
 											<i class="fa fa-star"></i>
@@ -277,10 +271,8 @@
 									</div>
 								</div>
 							</div>
-							<?php 
-							endforeach;
-						endif;
-							?>
+							<?php endforeach;
+							 ?>
 							<!-- /product -->
 						</div>
 						<!-- /store products -->
@@ -289,13 +281,11 @@
 						<div class="store-filter clearfix">
 							<span class="store-qty">Showing 20-100 products</span>
 							<ul class="store-pagination">
-								<li class="active">1</li>
-								<li><a href="#">2</a></li>
-								<li><a href="#">3</a></li>
-								<li><a href="#">4</a></li>
-								<li><a href="#"><i class="fa fa-angle-right"></i></a></li>
+							<?php echo $product->paginate($url, $total, $perPage); ?>
+								
 							</ul>
 						</div>
+						<?php endif?>
 						<!-- /store bottom filter -->
 					</div>
 					<!-- /STORE -->
@@ -305,5 +295,41 @@
 			<!-- /container -->
 		</div>
 		<!-- /SECTION -->
-<?php include "footer.php" ?>
-	
+
+		<!-- NEWSLETTER -->
+		<div id="newsletter" class="section">
+			<!-- container -->
+			<div class="container">
+				<!-- row -->
+				<div class="row">
+					<div class="col-md-12">
+						<div class="newsletter">
+							<p>Sign Up for the <strong>NEWSLETTER</strong></p>
+							<form>
+								<input class="input" type="email" placeholder="Enter Your Email">
+								<button class="newsletter-btn"><i class="fa fa-envelope"></i> Subscribe</button>
+							</form>
+							<ul class="newsletter-follow">
+								<li>
+									<a href="#"><i class="fa fa-facebook"></i></a>
+								</li>
+								<li>
+									<a href="#"><i class="fa fa-twitter"></i></a>
+								</li>
+								<li>
+									<a href="#"><i class="fa fa-instagram"></i></a>
+								</li>
+								<li>
+									<a href="#"><i class="fa fa-pinterest"></i></a>
+								</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+				<!-- /row -->
+			</div>
+			<!-- /container -->
+		</div>
+		<!-- /NEWSLETTER -->
+
+	<?php include "footer.html"; ?>

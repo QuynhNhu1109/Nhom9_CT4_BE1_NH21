@@ -55,6 +55,7 @@ Table OF Contents
 	Typography
 \*----------------------------*/
 
+
 body {
   font-family: 'Montserrat', sans-serif;
   font-weight: 400;
@@ -2164,7 +2165,6 @@ textarea.input {
     margin-bottom: 30px;
   }
 }
-
 @media only screen and (max-width: 767px) {
   .section-title .section-nav {
     float: none;
